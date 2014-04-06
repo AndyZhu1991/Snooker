@@ -101,15 +101,30 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Ball.h" />
+    <ClInclude Include="Line.h" />
+    <ClInclude Include="LineDistributionRandomGenerator.h" />
+    <ClInclude Include="My2DPhyEngine.h" />
+    <ClInclude Include="Point.h" />
+    <ClInclude Include="RandomGenerator.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Snooker.h" />
     <ClInclude Include="SnookerDlg.h" />
+    <ClInclude Include="Speed.h" />
+    <ClInclude Include="Spirit.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Table.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Ball.cpp" />
+    <ClCompile Include="Line.cpp" />
+    <ClCompile Include="LineDistributionRandomGenerator.cpp" />
+    <ClCompile Include="My2DPhyEngine.cpp" />
+    <ClCompile Include="Point.cpp" />
     <ClCompile Include="Snooker.cpp" />
     <ClCompile Include="SnookerDlg.cpp" />
+    <ClCompile Include="Speed.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
