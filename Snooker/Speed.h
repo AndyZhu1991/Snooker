@@ -12,6 +12,11 @@ private:
 public:
 	Speed(): x(0.0), y(0.0){};
 	Speed(double x, double y): x(x), y(y){};
+	
+	Speed operator+(const Speed &s);
+	Speed operator-(const Speed &s);
+
+	static Speed GetSpeedFromValueNRadian(double value, double radian);
 
 	double Value();		// 得到速度大小
 	double Radian();	// 得到弧度
