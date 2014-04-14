@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Line.h"
+#include "Edge.h"
 #include <list>
 
 class Table
@@ -10,17 +10,17 @@ private:
 	double height;
 
 public:
-	std::list<Line*> edge;
+	std::list<Edge*> edges;
 
 private:
-	void InitEdge();
+	void InitEdges();
 
 public:
 	Table(double width, double height): width(width), height(height)
 	{
-		InitEdge();
+		InitEdges();
 	};
 
-	double GetWidth() {return width;};
-	double GwiHeight() {return height;};
+	double GetWidth() { return width;};
+	double GwiHeight() { return height;};
 };

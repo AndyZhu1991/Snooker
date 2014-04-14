@@ -7,13 +7,15 @@
 class My2DPhyEngine
 {
 private:
-	double friction;			// æ‘©æ“¦åŠ›
+	double intervalTime;		// ¼ä¸ôÊ±¼ä
+
+	double friction;		// Ä¦²ÁÁ¦ÏµÊı
 	bool enableFriction;
 
-	double airResistance;		// ç©ºæ°”é˜»åŠ›
+	double airResistance;		// ¿ÕÆø×èÁ¦
 	bool enableAirResistance;
 
-	double hitEnergyLoss;		// ç¢°æ’èƒ½é‡æŸå¤±
+	double hitEnergyLoss;		// Åö×²ÄÜÁ¿ËğÊ§
 	bool enableHitEnergyLoss;
 
 	RandomGenerator *pRandomGenerator;
@@ -23,6 +25,7 @@ private:
 public:
 	My2DPhyEngine();
 
+	void SetIntervalTime(double intervalTime);
 	void SetFriction(double friction, bool enable);
 	void SetAirResistance(double airResistance, bool enable);
 	void SetHitEnergyLoss(double hitEnergyLoss, bool enable);
@@ -31,5 +34,5 @@ public:
 
 	void BallRun(Ball& ball);
 	void BallHitBall(Ball& ball1, Ball& ball2);
-	void BallHitEdge(Ball& ball, Table& table);
+	void BallHitTable(Ball& ball, Table& table);
 };

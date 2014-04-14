@@ -5,7 +5,7 @@ class Speed
 public:
 	static const double LIMIT_ZERO_SPEED;
 
-private:
+public:
 	double x;
 	double y;
 
@@ -15,14 +15,16 @@ public:
 	
 	Speed operator+(const Speed &s);
 	Speed operator-(const Speed &s);
+	Speed operator*(double d);
+	Speed operator/(double d);
 
 	static Speed GetSpeedFromValueNRadian(double value, double radian);
 
-	double Value();		// å¾—åˆ°é€Ÿåº¦å¤§å°
-	double Radian();	// å¾—åˆ°å¼§åº¦
+	double Value();		// µÃµ½ËÙ¶È´óĞ¡
+	double Radian();	// µÃµ½»¡¶È
 
-	// åˆ†è§£é€Ÿåº¦ï¼Œå…¶ä¸­ä¸€ä¸ªæ–¹å‘æ˜¯radianï¼Œå­˜åœ¨äºæ•°ç»„çš„0ä¸‹æ ‡
-	// å¦ä¸€ä¸ªæ–¹å‘ä¸radianå‚ç›´ï¼Œå­˜åœ¨äºæ•°ç»„çš„1ä¸‹æ ‡
+	// ·Ö½âËÙ¶È£¬ÆäÖĞÒ»¸ö·½ÏòÊÇradian£¬´æÔÚÓÚÊı×éµÄ0ÏÂ±ê
+	// ÁíÒ»¸ö·½ÏòÓëradian´¹Ö±£¬´æÔÚÓÚÊı×éµÄ1ÏÂ±ê
 	Speed* DecSpeed(double radian);
 	bool IsZero();
 };

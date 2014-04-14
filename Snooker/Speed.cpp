@@ -26,6 +26,16 @@ Speed Speed::operator-(const Speed& s)
 	return Speed(x - s.x, y - s.y);
 }
 
+Speed Speed::operator*(double d)
+{
+	return Speed(x * d, y * d);
+}
+
+Speed Speed::operator/(double d)
+{
+	return Speed(x / d, y / d);
+}
+
 Speed Speed::GetSpeedFromValueNRadian(double value, double radian)
 {
 	return Speed(value*cos(radian), value*sin(radian));

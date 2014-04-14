@@ -102,6 +102,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Ball.h" />
+    <ClInclude Include="Edge.h" />
     <ClInclude Include="Line.h" />
     <ClInclude Include="LineDistributionRandomGenerator.h" />
     <ClInclude Include="My2DPhyEngine.h" />

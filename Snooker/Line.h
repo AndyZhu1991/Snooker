@@ -22,6 +22,8 @@ public:
 		CalcAnB();
 	};
 
-	const Point& GetStart() {return start;};
-	const Point& GetEnd() {return end;};
+	double GetRadian();
+
+	const Point& GetStart() { return start;};
+	const Point& GetEnd() { return end;};
 };
