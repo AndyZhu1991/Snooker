@@ -35,4 +35,14 @@ public:
 	void BallRun(Ball& ball);
 	void BallHitBall(Ball& ball1, Ball& ball2);
 	void BallHitTable(Ball& ball, Table& table);
+
+private:
+	void BallHitEdge(Ball& ball, Edge* edge);
+	void BallHitHEdge(Ball& ball, Edge* edge);
+	void BallHitVEdge(Ball& ball, Edge* edge);
+	// Point ‘⁄‘≤…œ
+	void BallHitPoint(Ball& ball, Point& point);
+	void BallHitPoint(Ball& ball, double x, double y);
 };
+
+static double* CalcQEOOU(double a, double b, double c);
