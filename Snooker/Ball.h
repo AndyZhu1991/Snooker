@@ -13,21 +13,19 @@ public:
 
 private:
 	double radius;
-	int number;
 
 public:
 	Speed speed;
 	double weight;
 
 public:
-	Ball(double x, double y, bool visiable, double radius, int num,
-		double weight): Spirit(x, y, visiable),
-		radius(radius), number(num), weight(STD_BALL_WEIGHT) {};
-	Ball(double radius, int num, double weight)
-		: radius(radius), number(num), weight(STD_BALL_WEIGHT) {};
+	Ball(double x, double y, bool visiable, double radius,
+		double weight = STD_BALL_WEIGHT):
+		Spirit(x, y, visiable), radius(radius), weight(weight) {};
+	Ball(double radius, double weight = STD_BALL_WEIGHT)
+		: radius(radius), weight(weight) {};
 
 	double Distance(Ball& otherBall);	
 
 	double GetRadius() { return radius;};
-	int GetNumber() { return number;};
 };
