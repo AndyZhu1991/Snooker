@@ -3,7 +3,8 @@
 #include "Point.h"
 #include <math.h>
 
-const double Ball::STD_BALL_WEIGHT = 1.0;
+const double Ball::STD_WEIGHT = 1.0;
+const double Ball::STD_RADIUS = 0.02625;	// m
 
 double Ball::Distance(Ball& otherBall)
 {
