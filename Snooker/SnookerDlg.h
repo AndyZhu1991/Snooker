@@ -3,6 +3,8 @@
 //
 
 #pragma once
+#include "snookergame.h"
+#include "afxwin.h"
 
 
 // CSnookerDlg ¶Ô»°¿ò
@@ -29,4 +31,16 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+public:
+	void DrawFrame(void);
+	int m_nDrawWidth;
+	int m_nDrawHeight;
+	int m_nDisplayWidth;
+	int m_nDisplayHeight;
+	double m_dPixelPerM;
+	SnookerGame m_Game;
+	int m_nX;
+	int m_nY;
+	CDC m_dcMem;
+	int m_nDrawTimesOfDisplay;
 };

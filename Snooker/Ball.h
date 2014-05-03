@@ -29,11 +29,11 @@ public:
 	double weight;
 
 public:
-	Ball(double x, double y, bool visiable, double radius = STD_RADIUS,
-		double weight = STD_WEIGHT):
-		Spirit(x, y, visiable), radius(radius), weight(weight) {};
-		Ball(double radius = STD_RADIUS, double weight = STD_WEIGHT)
-		: radius(radius), weight(weight) {};
+	Ball(double x, double y, bool visiable, int type,
+		double radius = STD_RADIUS, double weight = STD_WEIGHT):
+		Spirit(x, y, visiable), type(type), radius(radius), weight(weight) {};
+		Ball(int type, double radius = STD_RADIUS, double weight = STD_WEIGHT)
+		: type(type), radius(radius), weight(weight) {};
 
 	double Distance(Ball& otherBall);	
 

@@ -111,6 +111,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Snooker.h" />
     <ClInclude Include="SnookerDlg.h" />
+    <ClInclude Include="SnookerGame.h" />
     <ClInclude Include="Speed.h" />
     <ClInclude Include="Spirit.h" />
     <ClInclude Include="stdafx.h" />
@@ -125,6 +126,7 @@
     <ClCompile Include="Point.cpp" />
     <ClCompile Include="Snooker.cpp" />
     <ClCompile Include="SnookerDlg.cpp" />
+    <ClCompile Include="SnookerGame.cpp" />
     <ClCompile Include="Speed.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>

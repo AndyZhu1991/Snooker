@@ -10,7 +10,11 @@ public:
 	static const double STD_WIDTH;
 	static const double STD_HEIGHT;
 	static const double STD_HOLE_SIZE;	// Two times of radius.
-	static const double STD_BLACK_BALL_POS;
+
+	// Ball position
+	static const double START_LINE;
+	static const double D_AREA_RADIUS;
+	static const double BLACK_BALL_POS;
 
 private:
 	double width;

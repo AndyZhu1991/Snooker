@@ -6,6 +6,10 @@ const double Table::STD_WIDTH = 3.569;
 const double Table::STD_HEIGHT = 1.778;
 const double Table::STD_HOLE_SIZE = 0.085;
 
+const double Table::START_LINE = 0.737;
+const double Table::D_AREA_RADIUS = 0.292;
+const double Table::BLACK_BALL_POS = 0.324;
+
 void Table::InitEdges()
 {
 	// Left-Top
