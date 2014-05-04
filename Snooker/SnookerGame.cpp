@@ -5,7 +5,7 @@
 
 #define PI 3.14159265453
 
-SnookerGame::SnookerGame()
+SnookerGame::SnookerGame(SnookerSurface* surface)
 {
 	static const int ballsType[] = { Ball::MOTHER_BALL,
 		Ball::YELLOW_BALL, Ball::GREEN_BALL,
@@ -20,10 +20,20 @@ SnookerGame::SnookerGame()
 		Ball::RED_BALL, Ball::RED_BALL,
 		Ball::RED_BALL};
 
+	this->surface = surface;
+	intervalTime = 3;
+	isBallsStop = true;
+
 	for (int i = 0; i < BALL_COUNT; i++)
 	{
 		balls[i] = new Ball(ballsType[i]);
 	}
+}
+
+void SnookerGame::InitGame()
+{
+	InitBalls();
+	InitEngine();
 }
 
 void SnookerGame::InitBalls()
@@ -72,4 +82,83 @@ void SnookerGame::InitBalls()
 		balls[pos+i]->x = balls[pos]->x;
 		balls[pos+i]->y = balls[pos]->y + Ball::STD_RADIUS * 2 * i;
 	}
+
+	for (int i = 0; i < BALL_COUNT; i++)
+	{
+		balls[i]->visiable = true;
+	}
+}
+
+void SnookerGame::InitEngine()
+{
+	engine.SetIntervalTime(intervalTime);
+}
+
+void SnookerGame::HitMotherBall(double speedValue, double radian)
+{
+	HitMotherBall(Speed::GetSpeedFromValueNRadian(speedValue, radian));
+}
+
+void SnookerGame::HitMotherBall(Speed speed)
+{
+	if (isBallsStop)
+	{
+		balls[0]->speed = speed;
+		StartTimer();
+	}
+}
+
+void SnookerGame::onTimer()
+{
+	if (!isBallsStop)
+	{
+		Calc1Tick();
+	}
+}
+
+void SnookerGame::Calc1Tick()
+{
+	int stopCount = 0;
+	for (int i = 0; i < BALL_COUNT; i++)
+	{
+		if (balls[i]->visiable)
+		{
+			engine.BallRun(*balls[i]);
+			engine.BallHitTable(*balls[i], table);
+			for (int j = i+1; j < BALL_COUNT; j++)
+			{
+				if (balls[j]->visiable)
+				{
+					engine.BallHitBall(*balls[i], *balls[j]);
+				}
+			}
+			if (!engine.IsBallInTable(*balls[i], table))
+			{
+				balls[i]->visiable = false;
+			}
+		}
+		if (!balls[i]->visiable || balls[i]->speed.IsZero)
+		{
+			stopCount++;
+		}
+	}
+	if (stopCount == BALL_COUNT)
+	{
+		onBallsStop();
+	}
+}
+
+void SnookerGame::StartTimer()
+{
+	surface->setTimer(intervalTime);
+}
+
+void SnookerGame::KillTimer()
+{
+	surface->killTimer();
+}
+
+void SnookerGame::onBallsStop()
+{
+	KillTimer();
 }

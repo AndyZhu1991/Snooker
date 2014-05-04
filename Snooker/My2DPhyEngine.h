@@ -6,6 +6,10 @@
 
 class My2DPhyEngine
 {
+public:
+	static const double STD_FRICTION;
+	static const double STD_AIR_RESISTANCE;
+
 private:
 	double intervalTime;		// º‰∏Ù ±º‰
 
@@ -35,6 +39,7 @@ public:
 	void BallRun(Ball& ball);
 	void BallHitBall(Ball& ball1, Ball& ball2);
 	void BallHitTable(Ball& ball, Table& table);
+	bool IsBallInTable(Ball& ball, Table& table);
 
 private:
 	void BallHitEdge(Ball& ball, Edge* edge);

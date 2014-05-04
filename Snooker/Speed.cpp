@@ -4,7 +4,7 @@
 
 const double PI = 3.14159265358979323846;
 
-const double Speed::LIMIT_ZERO_SPEED = 0.1;
+const double Speed::LIMIT_ZERO_SPEED = 0.01;
 
 double Speed::Value()
 {
@@ -24,6 +24,18 @@ Speed Speed::operator+(const Speed& s)
 Speed Speed::operator-(const Speed& s)
 {
 	return Speed(x - s.x, y - s.y);
+}
+
+Speed Speed::operator+(double d)
+{
+	double scale = d / Value();
+	return Speed(x * (1 + scale), y * (1 + scale));
+}
+
+Speed Speed::operator-(double d)
+{
+	double scale = d / Value();
+	return Speed(x * (1 - scale), y * (1 - scale));
 }
 
 Speed Speed::operator*(double d)

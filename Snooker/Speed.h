@@ -15,6 +15,8 @@ public:
 	
 	Speed operator+(const Speed &s);
 	Speed operator-(const Speed &s);
+	Speed operator+(double d);
+	Speed operator-(double d);
 	Speed operator*(double d);
 	Speed operator/(double d);
 

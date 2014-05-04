@@ -19,6 +19,7 @@ public:
 private:
 	double width;
 	double height;
+	double holeSize;
 
 public:
 	std::list<Edge*> edges;
@@ -27,8 +28,9 @@ private:
 	void InitEdges();
 
 public:
-	Table(double width = STD_WIDTH, double height = STD_HEIGHT)
-		: width(width), height(height)
+	Table(double width = STD_WIDTH, double height = STD_HEIGHT,
+		double holeSize = STD_HOLE_SIZE)
+		: width(width), height(height), holeSize(holeSize)
 	{
 		InitEdges();
 	};

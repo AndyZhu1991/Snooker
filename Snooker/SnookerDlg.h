@@ -5,10 +5,11 @@
 #pragma once
 #include "snookergame.h"
 #include "afxwin.h"
+#include "SnookerSurface.h"
 
 
 // CSnookerDlg 对话框
-class CSnookerDlg : public CDialogEx
+class CSnookerDlg : public CDialogEx, public SnookerSurface
 {
 // 构造
 public:
@@ -19,7 +20,9 @@ public:
 
 	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);	// DDX/DDV 支持
-
+	virtual void onBallsStop();
+	virtual void setTimer(int ms);
+	virtual void killTimer();
 
 // 实现
 protected:

@@ -13,21 +13,21 @@ const double Table::BLACK_BALL_POS = 0.324;
 void Table::InitEdges()
 {
 	// Left-Top
-	edges.push_back(new Edge(0.0, STD_HOLE_SIZE / sqrt(2),
-		STD_WIDTH/2 - STD_HOLE_SIZE/2, Edge::HORIZONTAL));
+	edges.push_back(new Edge(0.0, holeSize / sqrt(2),
+		width/2 - holeSize/2, Edge::HORIZONTAL));
 	// Right-Top
-	edges.push_back(new Edge(0.0, STD_WIDTH/2 + STD_HOLE_SIZE/2,
-		STD_WIDTH - STD_HOLE_SIZE/sqrt(2), Edge::HORIZONTAL));
+	edges.push_back(new Edge(0.0, width/2 + holeSize/2,
+		width - holeSize/sqrt(2), Edge::HORIZONTAL));
 	// Left-Bottom
-	edges.push_back(new Edge(STD_HEIGHT, STD_HOLE_SIZE / sqrt(2),
-		STD_WIDTH/2 - STD_HOLE_SIZE/2, Edge::HORIZONTAL));
+	edges.push_back(new Edge(height, holeSize / sqrt(2),
+		width/2 - holeSize/2, Edge::HORIZONTAL));
 	// Right-Bottom
-	edges.push_back(new Edge(STD_HEIGHT, STD_WIDTH/2 + STD_HOLE_SIZE/2,
-		STD_WIDTH - STD_HOLE_SIZE/sqrt(2), Edge::HORIZONTAL));
+	edges.push_back(new Edge(height, width/2 + holeSize/2,
+		width - holeSize/sqrt(2), Edge::HORIZONTAL));
 	// Left
-	edges.push_back(new Edge(0.0, STD_HOLE_SIZE / sqrt(2),
-		STD_HEIGHT - STD_HOLE_SIZE/sqrt(2), Edge::VERTICAL));
+	edges.push_back(new Edge(0.0, holeSize / sqrt(2),
+		height - holeSize/sqrt(2), Edge::VERTICAL));
 	// Right
-	edges.push_back(new Edge(STD_WIDTH, STD_HOLE_SIZE / sqrt(2),
-		STD_HEIGHT - STD_HOLE_SIZE/sqrt(2), Edge::VERTICAL));
+	edges.push_back(new Edge(width, holeSize / sqrt(2),
+		height - holeSize/sqrt(2), Edge::VERTICAL));
 }

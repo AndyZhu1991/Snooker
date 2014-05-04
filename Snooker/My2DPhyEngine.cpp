@@ -7,10 +7,15 @@
 #include <list>
 #include <iostream>
 
+const double My2DPhyEngine::STD_FRICTION = 1.0;
+const double My2DPhyEngine::STD_AIR_RESISTANCE = 0.5;
+
 My2DPhyEngine::My2DPhyEngine()
 {
-	enableFriction = false;
-	enableAirResistance = false;
+	enableFriction = true;
+	friction = STD_FRICTION;
+	enableAirResistance = true;
+	airResistance = STD_AIR_RESISTANCE;
 	enableHitEnergyLoss = false;
 	enableRandom = false;
 }
@@ -55,11 +60,16 @@ void My2DPhyEngine::BallRun(Ball& ball)
 	// 摩擦力
 	if (enableFriction)
 	{
+		ball.speed = ball.speed - friction * intervalTime;
+		//	friction * ball.weight / ball.weight * intervalTime;
 	}
 
 	// 空气阻力
 	if (enableAirResistance)
 	{
+		double ballSpeedValue = ball.speed.Value();
+		ball.speed = ball.speed -
+			airResistance * ballSpeedValue * ballSpeedValue / ball.weight * intervalTime;
 	}
 }
 
@@ -184,6 +194,17 @@ void My2DPhyEngine::BallHitPoint(Ball& ball, double x, double y)
 	{
 		ball.speed = ball.speed - speeds[0]*2;
 	}
+}
+
+bool My2DPhyEngine::IsBallInTable(Ball& ball, Table& table)
+{
+	if (ball.x > 0 && ball.x < table.GetWidth() &&
+		ball.y > 0 && ball.y < table.GwiHeight())
+	{
+		return true;
+	}
+
+	return false;
 }
 
 // 计算一元二次方程(quadratic equation of one unknown)

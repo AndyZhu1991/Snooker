@@ -7,11 +7,17 @@
 #include "SnookerDlg.h"
 #include "afxdialogex.h"
 #include "Table.h"
+#include <time.h>
+#include "mmsystem.h"  //包含头文件
+#pragma comment(lib, "winmm.lib")  //导入lib
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
+
+static void PASCAL TimeEventProc(UINT wTimerID, UINT msg, DWORD dwUser, DWORD dwl, DWORD dw2);
+static UINT calcTimerId;
 
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
 
@@ -58,6 +64,7 @@ CSnookerDlg::CSnookerDlg(CWnd* pParent /*=NULL*/)
 	, m_nX(0)
 	, m_nY(0)
 	, m_nDrawTimesOfDisplay(0)
+	, m_Game(this)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -123,7 +130,7 @@ BOOL CSnookerDlg::OnInitDialog()
 		m_nX = (rcCanvasClient.Width() - m_nDisplayWidth) / 2;
 		m_nY = 0;
     }
-	m_nDrawTimesOfDisplay = 2;
+	m_nDrawTimesOfDisplay = 4;
 	m_nDrawHeight = m_nDisplayHeight * m_nDrawTimesOfDisplay;
 	m_nDrawWidth = m_nDisplayWidth * m_nDrawTimesOfDisplay;
 	m_dPixelPerM = m_nDrawWidth / Table::STD_WIDTH;
@@ -217,6 +224,8 @@ void CSnookerDlg::DrawFrame(void)
 		CBrush(ballColor[6]), CBrush(ballColor[7])};
 	const double pixelInRadius = Ball::STD_RADIUS * m_dPixelPerM;
 	
+//	clock_t start_time=clock();
+
 	m_dcMem.SelectObject(whiteBrush);
 	m_dcMem.Rectangle(0, 0, m_nDrawWidth, m_nDrawHeight);
 
@@ -234,5 +243,32 @@ void CSnookerDlg::DrawFrame(void)
 						m_Game.balls[i]->y * m_dPixelPerM - pixelInRadius,
 						m_Game.balls[i]->x * m_dPixelPerM + pixelInRadius,
 						m_Game.balls[i]->y * m_dPixelPerM + pixelInRadius);
+	}
+
+/*	clock_t end_time=clock();
+	CString str;
+	str.Format(_T("Running time is: %dms"), (end_time-start_time)/CLOCKS_PER_SEC*1000);
+	MessageBox(str);*/
+}
+
+void CSnookerDlg::onBallsStop()
+{
+}
+
+void CSnookerDlg::setTimer(int ms)
+{
+	calcTimerId = timeSetEvent(ms, ms, TimeEventProc, (DWORD)this, TIME_PERIODIC);
+}
+
+void CSnookerDlg::killTimer()
+{
+	timeKillEvent(calcTimerId);
+}
+
+static void PASCAL TimeEventProc(UINT wTimerID, UINT msg, DWORD dwUser, DWORD dwl, DWORD dw2)
+{
+	if (wTimerID == calcTimerId)
+	{
+		((CSnookerDlg*)dwUser)->m_Game.onTimer();
 	}
 }
