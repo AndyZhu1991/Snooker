@@ -7,8 +7,9 @@
 #include <list>
 #include <iostream>
 
-const double My2DPhyEngine::STD_FRICTION = 1.0;
-const double My2DPhyEngine::STD_AIR_RESISTANCE = 0.5;
+const double My2DPhyEngine::STD_FRICTION = 0.02;
+const double My2DPhyEngine::STD_AIR_RESISTANCE = 0.05;
+const double My2DPhyEngine::G = 9.8;
 
 My2DPhyEngine::My2DPhyEngine()
 {
@@ -23,6 +24,11 @@ My2DPhyEngine::My2DPhyEngine()
 void My2DPhyEngine::SetIntervalTime(double intervalTime)
 {
 	this->intervalTime = intervalTime;
+}
+
+void My2DPhyEngine::SetIntervalTime(int intervalTime)
+{
+	this->intervalTime = 1.0 * intervalTime / 1000.0;
 }
 
 void My2DPhyEngine::SetFriction(double friction, bool enable = true)
@@ -60,12 +66,21 @@ void My2DPhyEngine::BallRun(Ball& ball)
 	// Ä¦²ÁÁ¦
 	if (enableFriction)
 	{
-		ball.speed = ball.speed - friction * intervalTime;
-		//	friction * ball.weight / ball.weight * intervalTime;
+		double speedChange = friction * G * intervalTime;
+		//	ball.weight * G * friction / ball.weight * intervalTime;
+		if (ball.speed.Value() < speedChange)
+		{
+			ball.speed.x = 0.0;
+			ball.speed.y = 0.0;
+		}
+		else
+		{
+			ball.speed = ball.speed - speedChange;
+		}
 	}
 
 	// ¿ÕÆø×èÁ¦
-	if (enableAirResistance)
+	if (enableAirResistance && !ball.speed.IsZero())
 	{
 		double ballSpeedValue = ball.speed.Value();
 		ball.speed = ball.speed -
@@ -199,7 +214,7 @@ void My2DPhyEngine::BallHitPoint(Ball& ball, double x, double y)
 bool My2DPhyEngine::IsBallInTable(Ball& ball, Table& table)
 {
 	if (ball.x > 0 && ball.x < table.GetWidth() &&
-		ball.y > 0 && ball.y < table.GwiHeight())
+		ball.y > 0 && ball.y < table.GetHeight())
 	{
 		return true;
 	}

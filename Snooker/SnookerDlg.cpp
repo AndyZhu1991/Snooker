@@ -18,6 +18,7 @@
 
 static void PASCAL TimeEventProc(UINT wTimerID, UINT msg, DWORD dwUser, DWORD dwl, DWORD dw2);
 static UINT calcTimerId;
+static UINT drawTimerId;
 
 // 用于应用程序“关于”菜单项的 CAboutDlg 对话框
 
@@ -65,6 +66,10 @@ CSnookerDlg::CSnookerDlg(CWnd* pParent /*=NULL*/)
 	, m_nY(0)
 	, m_nDrawTimesOfDisplay(0)
 	, m_Game(this)
+	, m_nDrawIntervalTime(0)
+	, m_uRunNSteps(0)
+	, m_dTestSpeedX(0)
+	, m_dTestSpeedY(0)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -72,12 +77,22 @@ CSnookerDlg::CSnookerDlg(CWnd* pParent /*=NULL*/)
 void CSnookerDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
+	DDX_Text(pDX, IDC_EDIT_STEPS, m_uRunNSteps);
+	DDV_MinMaxUInt(pDX, m_uRunNSteps, 1, 10000);
+	DDX_Text(pDX, IDC_EDIT_TEST_SPEED_X, m_dTestSpeedX);
+	DDX_Text(pDX, IDC_EDIT_TEST_SPEED_Y, m_dTestSpeedY);
 }
 
 BEGIN_MESSAGE_MAP(CSnookerDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
+	ON_BN_CLICKED(ID_WIZNEXT, &CSnookerDlg::OnBnClickedWiznext)
+	ON_BN_CLICKED(IDC_BUTTON_TEST_STOP, &CSnookerDlg::OnBnClickedButtonTestStop)
+	ON_BN_CLICKED(IDC_BUTTON_TEST_1STEP, &CSnookerDlg::OnBnClickedButtonTest1step)
+	ON_BN_CLICKED(IDC_BUTTON_TEST_INIT, &CSnookerDlg::OnBnClickedButtonTestInit)
+	ON_BN_CLICKED(IDC_BUTTON_TEST_N_STEPS, &CSnookerDlg::OnBnClickedButtonTestNSteps)
+	ON_BN_CLICKED(IDC_BUTTON_TEST_HIT, &CSnookerDlg::OnBnClickedButtonTestHit)
 END_MESSAGE_MAP()
 
 
@@ -130,7 +145,8 @@ BOOL CSnookerDlg::OnInitDialog()
 		m_nX = (rcCanvasClient.Width() - m_nDisplayWidth) / 2;
 		m_nY = 0;
     }
-	m_nDrawTimesOfDisplay = 4;
+	m_nDrawTimesOfDisplay = 2;
+	m_nDrawIntervalTime = 30;
 	m_nDrawHeight = m_nDisplayHeight * m_nDrawTimesOfDisplay;
 	m_nDrawWidth = m_nDisplayWidth * m_nDrawTimesOfDisplay;
 	m_dPixelPerM = m_nDrawWidth / Table::STD_WIDTH;
@@ -141,7 +157,7 @@ BOOL CSnookerDlg::OnInitDialog()
 		GetDlgItem(IDC_CANVAS)->GetDC(), m_nDrawWidth, m_nDrawHeight);
 	m_dcMem.SelectObject(memBitmap);
 
-	m_Game.InitBalls();
+//	m_Game.InitBalls();
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -185,14 +201,7 @@ void CSnookerDlg::OnPaint()
 	else
 	{
 		CDialogEx::OnPaint();
-		DrawFrame();
-		CDC* pDc = GetDlgItem(IDC_CANVAS)->GetDC();
-		pDc->SetStretchBltMode(HALFTONE);
-	//	SetBrushOrgEx(*pDc, 0, 0, NULL);
-		pDc->StretchBlt(m_nX, m_nY, m_nDisplayWidth, m_nDisplayHeight,
-			&m_dcMem, 0, 0, m_nDrawWidth, m_nDrawHeight, SRCCOPY);
-	//	pDc->BitBlt(m_nX, m_nY, m_nDisplayWidth, m_nDisplayHeight,
-	//		&m_dcMem, 0, 0, SRCCOPY);
+
 	}
 }
 
@@ -203,7 +212,14 @@ HCURSOR CSnookerDlg::OnQueryDragIcon()
 	return static_cast<HCURSOR>(m_hIcon);
 }
 
-
+void CSnookerDlg::StretchToCanvas(void)
+{
+	CDC* pDc = GetDlgItem(IDC_CANVAS)->GetDC();
+	pDc->SetStretchBltMode(HALFTONE);
+//	SetBrushOrgEx(*pDc, 0, 0, NULL);
+	pDc->StretchBlt(m_nX, m_nY, m_nDisplayWidth, m_nDisplayHeight,
+		&m_dcMem, 0, 0, m_nDrawWidth, m_nDrawHeight, SRCCOPY);
+}
 
 void CSnookerDlg::DrawFrame(void)
 {
@@ -255,14 +271,22 @@ void CSnookerDlg::onBallsStop()
 {
 }
 
+static bool isCalcTimerStarted = false;
+static bool isDrawTimerStarted = false;
+
 void CSnookerDlg::setTimer(int ms)
 {
 	calcTimerId = timeSetEvent(ms, ms, TimeEventProc, (DWORD)this, TIME_PERIODIC);
+	isCalcTimerStarted = true;
 }
 
 void CSnookerDlg::killTimer()
 {
-	timeKillEvent(calcTimerId);
+	if (isCalcTimerStarted)
+	{
+		timeKillEvent(calcTimerId);
+		isCalcTimerStarted = false;
+	}
 }
 
 static void PASCAL TimeEventProc(UINT wTimerID, UINT msg, DWORD dwUser, DWORD dwl, DWORD dw2)
@@ -271,4 +295,82 @@ static void PASCAL TimeEventProc(UINT wTimerID, UINT msg, DWORD dwUser, DWORD dw
 	{
 		((CSnookerDlg*)dwUser)->m_Game.onTimer();
 	}
+	else if (wTimerID == drawTimerId)
+	{
+		((CSnookerDlg*)dwUser)->DrawFrame();
+		((CSnookerDlg*)dwUser)->StretchToCanvas();
+	}
+}
+
+void CSnookerDlg::SetDrawTimer(void)
+{
+	drawTimerId = timeSetEvent(m_nDrawIntervalTime, m_nDrawIntervalTime,
+		TimeEventProc, (DWORD)this, TIME_PERIODIC);
+	isDrawTimerStarted = true;
+}
+
+
+void CSnookerDlg::KillDrawTimer(void)
+{
+	if (isDrawTimerStarted)
+	{
+		timeKillEvent(drawTimerId);
+		isDrawTimerStarted = false;
+	}
+}
+
+
+void CSnookerDlg::OnBnClickedWiznext()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	m_Game.StartTimer();
+	SetDrawTimer();
+}
+
+
+void CSnookerDlg::OnBnClickedButtonTestStop()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	KillDrawTimer();
+	killTimer();
+}
+
+
+void CSnookerDlg::OnBnClickedButtonTest1step()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	m_Game.onTimer();
+	DrawFrame();
+	StretchToCanvas();
+}
+
+
+void CSnookerDlg::OnBnClickedButtonTestInit()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	UpdateData();
+	m_Game.InitGame();
+	m_Game.balls[0]->speed = Speed(m_dTestSpeedX, m_dTestSpeedY);
+	m_Game.isBallsStop = false;
+	DrawFrame();
+	StretchToCanvas();
+}
+
+
+void CSnookerDlg::OnBnClickedButtonTestNSteps()
+{
+	// TODO: 在此添加控件通知处理程序代码
+	UpdateData();
+	for (int i = 0; i < m_uRunNSteps; i++)
+	{
+		m_Game.onTimer();
+	}
+	DrawFrame();
+	StretchToCanvas();
+}
+
+
+void CSnookerDlg::OnBnClickedButtonTestHit()
+{
+	// TODO: 在此添加控件通知处理程序代码
 }

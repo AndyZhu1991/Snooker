@@ -36,5 +36,5 @@ public:
 	};
 
 	double GetWidth() { return width;};
-	double GwiHeight() { return height;};
+	double GetHeight() { return height;};
 };

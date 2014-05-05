@@ -9,6 +9,7 @@ class My2DPhyEngine
 public:
 	static const double STD_FRICTION;
 	static const double STD_AIR_RESISTANCE;
+	static const double G;
 
 private:
 	double intervalTime;		// º‰∏Ù ±º‰
@@ -28,8 +29,9 @@ private:
 
 public:
 	My2DPhyEngine();
-
+	
 	void SetIntervalTime(double intervalTime);
+	void SetIntervalTime(int intervalTime);
 	void SetFriction(double friction, bool enable);
 	void SetAirResistance(double airResistance, bool enable);
 	void SetHitEnergyLoss(double hitEnergyLoss, bool enable);

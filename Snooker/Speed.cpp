@@ -4,7 +4,7 @@
 
 const double PI = 3.14159265358979323846;
 
-const double Speed::LIMIT_ZERO_SPEED = 0.01;
+const double Speed::LIMIT_ZERO_SPEED = 0.001;
 
 double Speed::Value()
 {
@@ -13,7 +13,18 @@ double Speed::Value()
 
 double Speed::Radian()
 {
-	return atan(y/x);
+	if (x > 0)
+	{
+		return atan(y/x);
+	}
+	else if (y > 0)
+	{
+		return atan(y/x) + PI;
+	}
+	else if (y < 0)
+	{
+		return atan(y/x) - PI;
+	}
 }
 
 Speed Speed::operator+(const Speed& s)
@@ -28,14 +39,24 @@ Speed Speed::operator-(const Speed& s)
 
 Speed Speed::operator+(double d)
 {
-	double scale = d / Value();
-	return Speed(x * (1 + scale), y * (1 + scale));
+	if (!IsZero())
+	{
+		double scale = d / Value();
+		return Speed(x * (1 + scale), y * (1 + scale));
+	}
+
+	return *this;
 }
 
 Speed Speed::operator-(double d)
 {
-	double scale = d / Value();
-	return Speed(x * (1 - scale), y * (1 - scale));
+	if (!IsZero())
+	{
+		double scale = d / Value();
+		return Speed(x * (1 - scale), y * (1 - scale));
+	}
+
+	return *this;
 }
 
 Speed Speed::operator*(double d)
@@ -75,13 +96,13 @@ Speed* Speed::DecSpeed(double radian)
 	// 将速度分解
 
 	double radian2;	// radian2是radian的反方向弧度
-	if (radian < PI)
+	if (radian > 0)
 	{
-		radian2 = radian + PI;
+		radian2 = radian - PI;
 	}
 	else
 	{
-		radian2 = radian - PI;
+		radian2 = radian + PI;
 	}
 
 	// 计算得到那个与当前方向相差PI/2以内的弧度以及弧度差
@@ -100,4 +121,9 @@ Speed* Speed::DecSpeed(double radian)
 	speeds[1] = *this - speeds[0];
 
 	return speeds;
+}
+
+bool Speed::IsZero()
+{
+	return Value() < LIMIT_ZERO_SPEED;
 }

@@ -5,6 +5,8 @@
 
 #define PI 3.14159265453
 
+const double SnookerGame::RED_BALL_INIT_DIS = 0.001;
+
 SnookerGame::SnookerGame(SnookerSurface* surface)
 {
 	static const int ballsType[] = { Ball::MOTHER_BALL,
@@ -75,17 +77,21 @@ void SnookerGame::InitBalls()
 		for(int j = 1; j <= i; j++, pos++)
 		{
 			// 初始化 pos 右上方的那个
-			balls[pos+i]->x = balls[pos]->x + Ball::STD_RADIUS / tan(PI / 6);
-			balls[pos+i]->y = balls[pos]->y - Ball::STD_RADIUS;
+			balls[pos+i]->x = balls[pos]->x +
+				(Ball::STD_RADIUS + RED_BALL_INIT_DIS / 2) / tan(PI / 6);
+			balls[pos+i]->y = balls[pos]->y -
+				(Ball::STD_RADIUS + RED_BALL_INIT_DIS / 2);
 		}
 		// 每一列再加一个
 		balls[pos+i]->x = balls[pos]->x;
-		balls[pos+i]->y = balls[pos]->y + Ball::STD_RADIUS * 2 * i;
+		balls[pos+i]->y = balls[pos]->y + (Ball::STD_RADIUS * 2 + RED_BALL_INIT_DIS) * i;
 	}
 
 	for (int i = 0; i < BALL_COUNT; i++)
 	{
 		balls[i]->visiable = true;
+		balls[i]->speed.x = 0.0;
+		balls[i]->speed.y = 0.0;
 	}
 }
 
@@ -104,6 +110,7 @@ void SnookerGame::HitMotherBall(Speed speed)
 	if (isBallsStop)
 	{
 		balls[0]->speed = speed;
+		isBallsStop = false;
 		StartTimer();
 	}
 }
@@ -137,7 +144,7 @@ void SnookerGame::Calc1Tick()
 				balls[i]->visiable = false;
 			}
 		}
-		if (!balls[i]->visiable || balls[i]->speed.IsZero)
+		if (!balls[i]->visiable || balls[i]->speed.IsZero())
 		{
 			stopCount++;
 		}

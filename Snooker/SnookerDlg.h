@@ -46,4 +46,18 @@ public:
 	int m_nY;
 	CDC m_dcMem;
 	int m_nDrawTimesOfDisplay;
+	void SetDrawTimer(void);
+	void KillDrawTimer(void);
+	int m_nDrawIntervalTime;
+	void StretchToCanvas(void);
+	afx_msg void OnBnClickedWiznext();
+	afx_msg void OnBnClickedButtonTestStop();
+	afx_msg void OnBnClickedButtonTest1step();
+	afx_msg void OnBnClickedButtonTestInit();
+//	unsigned int m_uTestNSteps;
+	afx_msg void OnBnClickedButtonTestNSteps();
+	UINT m_uRunNSteps;
+	afx_msg void OnBnClickedButtonTestHit();
+	double m_dTestSpeedX;
+	double m_dTestSpeedY;
 };

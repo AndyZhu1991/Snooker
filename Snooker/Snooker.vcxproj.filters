@@ -63,6 +63,12 @@
     <ClInclude Include="Edge.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="SnookerGame.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="SnookerSurface.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Snooker.cpp">
@@ -93,6 +99,12 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="Table.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SnookerGame.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="SnookerSurface.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
