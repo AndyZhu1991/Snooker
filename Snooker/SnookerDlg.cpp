@@ -67,9 +67,9 @@ CSnookerDlg::CSnookerDlg(CWnd* pParent /*=NULL*/)
 	, m_nDrawTimesOfDisplay(0)
 	, m_Game(this)
 	, m_nDrawIntervalTime(0)
-	, m_uRunNSteps(0)
-	, m_dTestSpeedX(0)
-	, m_dTestSpeedY(0)
+	, m_uRunNSteps(1)
+	, m_dTestSpeedX(2)
+	, m_dTestSpeedY(2)
 {
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
 }
@@ -158,6 +158,7 @@ BOOL CSnookerDlg::OnInitDialog()
 	m_dcMem.SelectObject(memBitmap);
 
 //	m_Game.InitBalls();
+	HideTestControlsIfDebug();
 
 	return TRUE;  // 除非将焦点设置到控件，否则返回 TRUE
 }
@@ -276,8 +277,11 @@ static bool isDrawTimerStarted = false;
 
 void CSnookerDlg::setTimer(int ms)
 {
-	calcTimerId = timeSetEvent(ms, ms, TimeEventProc, (DWORD)this, TIME_PERIODIC);
-	isCalcTimerStarted = true;
+	if (!isCalcTimerStarted)
+	{
+		calcTimerId = timeSetEvent(ms, ms, TimeEventProc, (DWORD)this, TIME_PERIODIC);
+		isCalcTimerStarted = true;
+	}
 }
 
 void CSnookerDlg::killTimer()
@@ -304,9 +308,12 @@ static void PASCAL TimeEventProc(UINT wTimerID, UINT msg, DWORD dwUser, DWORD dw
 
 void CSnookerDlg::SetDrawTimer(void)
 {
-	drawTimerId = timeSetEvent(m_nDrawIntervalTime, m_nDrawIntervalTime,
-		TimeEventProc, (DWORD)this, TIME_PERIODIC);
-	isDrawTimerStarted = true;
+	if (!isDrawTimerStarted)
+	{
+		drawTimerId = timeSetEvent(m_nDrawIntervalTime, m_nDrawIntervalTime,
+			TimeEventProc, (DWORD)this, TIME_PERIODIC);
+		isDrawTimerStarted = true;
+	}
 }
 
 
@@ -373,4 +380,23 @@ void CSnookerDlg::OnBnClickedButtonTestNSteps()
 void CSnookerDlg::OnBnClickedButtonTestHit()
 {
 	// TODO: 在此添加控件通知处理程序代码
+	UpdateData();
+	m_Game.HitMotherBall(Speed(m_dTestSpeedX, m_dTestSpeedY));
+}
+
+
+void CSnookerDlg::HideTestControlsIfDebug(void)
+{
+#ifndef _DEBUG
+
+	int testIDs[] = {IDC_STATIC_X, IDC_EDIT_TEST_SPEED_X, IDC_STATIC_Y,
+		IDC_EDIT_TEST_SPEED_Y, IDC_BUTTON_TEST_HIT, IDC_BUTTON_TEST_INIT,
+		ID_WIZNEXT, IDC_BUTTON_TEST_STOP, IDC_BUTTON_TEST_1STEP,
+		IDC_EDIT_STEPS, IDC_BUTTON_TEST_N_STEPS};
+	for (int i = 0; i < sizeof(testIDs)/sizeof(testIDs[0]); i++)
+	{
+		GetDlgItem(testIDs[i])->ShowWindow(false);
+	}
+
+#endif
 }

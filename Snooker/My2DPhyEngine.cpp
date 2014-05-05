@@ -94,6 +94,9 @@ void My2DPhyEngine::BallHitBall(Ball& ball1, Ball& ball2)
 		return ;
 
 	Speed speedDiff = ball1.speed - ball2.speed;
+	if (speedDiff.IsZero())
+		return;
+
 	// 两球心连线的角度
 	double radian = Line(Point(ball1.x, ball1.y), Point(ball2.x, ball2.y))
 			.GetRadian();

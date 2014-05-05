@@ -60,4 +60,6 @@ public:
 	afx_msg void OnBnClickedButtonTestHit();
 	double m_dTestSpeedX;
 	double m_dTestSpeedY;
+private:
+	void HideTestControlsIfDebug(void);
 };

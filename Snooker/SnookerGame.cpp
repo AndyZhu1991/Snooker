@@ -167,5 +167,7 @@ void SnookerGame::KillTimer()
 
 void SnookerGame::onBallsStop()
 {
+	isBallsStop = true;
 	KillTimer();
+	surface->onBallsStop();
 }
