@@ -101,6 +101,14 @@ void My2DPhyEngine::BallHitBall(Ball& ball1, Ball& ball2)
 	double radian = Line(Point(ball1.x, ball1.y), Point(ball2.x, ball2.y))
 			.GetRadian();
 	Speed* speeds = speedDiff.DecSpeed(radian);
+
+	// Fix the gay bug.
+	if ((ball2.x - ball1.x) / speeds[0].x < 0.0 &&	// 如果两个球正在越走越远，
+		(ball2.y - ball1.y) / speeds[0].y < 0.0)	// 即使他们的相交也不应该产生碰撞。
+	{
+		return;
+	}
+
 	// 弹性碰撞
 	ball1.speed = ball1.speed - speeds[0] + 
 			(speeds[0] * (ball1.weight-ball2.weight))
